@@ -1,0 +1,71 @@
+7
+3 8
+8 1 0
+2 7 4 4 
+4 5 2 6 5 
+ont put the max_sum for up to down from difference row or colum. 
+D(r, j) represents r th row and j reprs j th number in r .
+MaxSum(r, j) represents the max sum all the way down from D(r, j). 
+Recurtion method: D(r, j) --> D(r+1, j) or D(r+1, j+1)
+if(r ==N)
+MaxSum(r, j) = D(r, j)
+else
+MaxSum(r, j) = MaxSum{MaxSum(r+1, j), MaxSum(r+1, j+1)} + D(r, j)
+
+The whole Code:
+#include <iostream>    
+#include <algorithm>   
+#define MAX 101    
+using namespace std;   
+int D[MAX][MAX];    
+int n;    
+int MaxSum(int i, int j){      
+    if(i==n)    
+        return D[i][j];      
+    int x = MaxSum(i+1,j);      
+    int y = MaxSum(i+1,j+1);      
+    return max(x,y)+D[i][j];    
+}  
+int main(){      
+    int i,j;      
+    cin >> n;      
+    for(i=1;i<=n;i++)     
+        for(j=1;j<=i;j++)          
+            cin >> D[i][j];      
+    cout << MaxSum(1,1) << endl;    
+} 
+run HEAP VOVERLOAD overtime because of recursion.
+Improved Code(DP):
+#include <iostream>    
+#include <algorithm>   
+using namespace std;  
+   
+#define MAX 101  
+    
+int D[MAX][MAX];      
+int n;    
+int maxSum[MAX][MAX];  
+   
+int MaxSum(int i, int j){        
+    if( maxSum[i][j] != -1 )           
+        return maxSum[i][j];        
+    if(i==n)     
+        maxSum[i][j] = D[i][j];       
+    else{      
+        int x = MaxSum(i+1,j);         
+        int y = MaxSum(i+1,j+1);         
+        maxSum[i][j] = max(x,y)+ D[i][j];       
+    }       
+    return maxSum[i][j];   
+}   
+int main(){      
+    int i,j;      
+    cin >> n;      
+    for(i=1;i<=n;i++)     
+        for(j=1;j<=i;j++) {         
+            cin >> D[i][j];         
+            maxSum[i][j] = -1;     
+        }      
+    cout << MaxSum(1,1) << endl;   
+}  
+
